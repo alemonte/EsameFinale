@@ -6,12 +6,23 @@ public class NodoTensore {
 	private ArrayList<Tensore>tensori;
 	private ArrayList<NodoTensore>nodi;
 	private String nome;
+	/**
+	 * costruttore1
+	 * @param tensori
+	 * @param nodi
+	 * @param nome
+	 */
 	public NodoTensore(ArrayList<Tensore>tensori,ArrayList<NodoTensore>nodi,String nome)
 	{
 		this.tensori=tensori;
 		this.nodi=nodi;
 		this.setNome(nome);
 	}
+	/**
+	 * cosstruttore2
+	 * @param tensori
+	 * @param nome
+	 */
 	public NodoTensore(ArrayList<Tensore>tensori,String nome)
 	{
 		this.tensori=tensori;

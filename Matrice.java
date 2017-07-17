@@ -3,11 +3,20 @@ package Esame;
 public class Matrice {
 	private int [][] mat;
 	private int dim;
-	
+	/**
+	 * 
+	 * @param valori
+	 */
 	public Matrice(int [][]valori){
 		setMat(valori);
 		setDim(valori.length);
 	}
+	/**
+	 * metodo per il calcolo del determinante con l'uso di laplace
+	 * @param mat
+	 * @param dim
+	 * @return
+	 */
 	public static int calcDetLaplace(int mat[][], int dim) 
 		{
 			int det = 0;
@@ -36,9 +45,9 @@ public class Matrice {
 					}		
 			
 					if(k % 2 == 0)
-					det += (int)mat[0][k] * calcDetLaplace(mat1, dim - 1);
+					det += (int)mat[0][k] * calcDetLaplace(mat1, dim - 1);//ricorsione
 					else
-					det -= (int)mat[0][k] * calcDetLaplace(mat1, dim - 1);
+					det -= (int)mat[0][k] * calcDetLaplace(mat1, dim - 1);//ricorsione
 				}
 	
 			}

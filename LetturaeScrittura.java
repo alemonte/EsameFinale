@@ -18,11 +18,20 @@ public class LetturaeScrittura{
 	
 	public static Albero lettura(String filename) throws NumberFormatException, XMLStreamException, FileNotFoundException
 	{
+		int s=0;
 		File file;
 		Albero Albero1;
+		ArrayList<Integer>valoriarray= new ArrayList<Integer>();
 		ArrayList<NodoTensore>tuttiNodi= new ArrayList<NodoTensore>();
 		ArrayList<Tensore>tensori= new ArrayList<Tensore>();
-		
+		ArrayList<Matrice>matrici= new ArrayList<Matrice>();
+		ArrayList<NodoTensore>nodiTensori= new ArrayList<NodoTensore>();
+		NodoTensore nodoten;
+		Tensore tensore;
+		Matrice mat;
+		int [][]valori;
+		int j=0;
+		int k=0;		
 	
 		try
 		{
@@ -56,11 +65,14 @@ public class LetturaeScrittura{
 						case XMLStreamConstants.START_ELEMENT:
 							if("label".equals(reader.getLocalName())){
 								readLabel=true;
+								
 							}
 							else if("TTree".equals(reader.getLocalName()))
 								readTTree=true;
-							else if("TensorNode".equals(reader.getLocalName()))
+							else if("TensorNode".equals(reader.getLocalName())){
 								readTensorNode=true;
+							  s= s+1;
+							}
 							else if("Tensor".equals(reader.getLocalName()))
 								readTensor=true;
 							else if("row".equals(reader.getLocalName()))
@@ -73,53 +85,79 @@ public class LetturaeScrittura{
 						case XMLStreamConstants.CHARACTERS:
 						
 							//TODO if readname nome=reader.getText().trim() readname=false;
-							if(readTTree){
-							System.out.println("inizio lettura albero");;
-								readTTree=false;
-							}
+
 							if(readLabel){
 								nome=reader.getText().toString().trim();
+								System.out.println(nome);
+
 								readLabel=false;
 							}
-							if(readTensorNode){
-								String stringa=reader.getText().toString().trim();
-								if(!stringa.isEmpty()) qnt=Integer.parseInt(stringa);
-								readQnt=false;
-							}
 			
-							if(read){
-								annata=Integer.parseInt(reader.getText().toString().trim());
-								readAnnata=false;
+							if(readColumn){
+								
+								String l=reader.getText().trim();
+								int elemento=Integer.parseInt(l);
+								valoriarray.add(elemento);						
+								readColumn=false;
+								
 							}
-			
-							if(readRegione){
-								regione=reader.getText().trim();
-							}
-			
-							if(readProduttore){
-								produttore=reader.getText().trim();
-								readProduttore=false;
+							if(readRow){
+								k++;
+								readRow=false;
 							}
 							break;
+			
 
 						case XMLStreamConstants.END_ELEMENT:
 							switch(reader.getLocalName())
 							{
-								case "wine":
-									Vino vino= new Vino(nome, prezzo, annata, regione, produttore, qnt);
-									if(vini.add(vino))
-									{
-										//System.out.println("vino aggiunto  -" +vino.getNome());
-										nome=""; produttore=""; regione=""; valuta="";
-										annata=0; qnt=0;
-										numero=0;
-										prezzo=null;
+
+								case "matrix":
+									System.out.println(k);
+
+									valori= new int [k][k];
+									int z=k;
+									for(int w=0;w<valoriarray.size();w++)
+									{ j=0;
+									  k=0;
+										valori[j][k]=valoriarray.get(w);
+										k++;
+										if(w==z-1){
+											j++;
+											k=0;
+										}
 									}
-				
+									mat= new Matrice(valori);
+									matrici.add(mat);
+									readMatrix=false;
+									k=0;
+									j=0;
+									
 									break;
-								case "wines":
-									stampaVini();
+								case "tensor":
+									tensore=new Tensore(matrici);
+									readTensor=false;
+									tensori.add(tensore);
+									matrici.clear();
 									break;
+								case "TensorNode":
+									
+								if(readTensorNode)
+								{
+									
+									nodoten= new NodoTensore(tensori, nome);
+								    tuttiNodi.add(nodoten);
+								    //tensori.clear();
+								    s=0;
+								    readTensorNode=false;
+								}
+								
+							/*	else 
+								{
+									nodoten=new NodoTensore(tensori,nodiTensori,nome);
+									tuttiNodi.add(nodoten);
+									s--;
+								}*/
 							}
 							break;
 			
@@ -128,6 +166,7 @@ public class LetturaeScrittura{
 							break;
 					}
 		}
+		return Albero1=new Albero(tuttiNodi);
 		
 	}
 }	

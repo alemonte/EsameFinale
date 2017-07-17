@@ -15,10 +15,14 @@ public class Tensore {
 	public Tensore(ArrayList<Matrice>matrici){
 		this.matrici=matrici;
 	}
+	/**
+	 * calcola la somma dei determinanti delle matrici facenti parte di un tensore
+	 * @return somma
+	 */
 	public int calcSommaDetLaplace()
 	{
 		int somma=0;
-		for(int i =0;i<matrici.size();i++)
+		for(int i =0;i<matrici.size();i++)//scorro tutte le matrici del tensore
 		{
 			somma += Matrice.calcDetLaplace(matrici.get(i).getMat(), matrici.get(i).getDim());
 		}
